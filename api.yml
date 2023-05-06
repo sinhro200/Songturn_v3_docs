@@ -1,0 +1,76 @@
+openapi: '3.0.2'
+info:
+  title: Songturn_v3
+  version: '1.0'
+security:
+  - jwtInHeader: []
+
+tags:
+  - name: auth
+    description: "Auth and registering account"
+
+servers:
+  - url: https://api.server.test/v1
+paths:
+  /test:
+    get:
+      responses:
+        '200':
+          description: OK
+  /account/register_simple:
+    post:
+      description: simple account registration
+      tags:
+        - auth
+      security:
+        - {}
+      
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RequestRegisterSimple"
+      responses:
+        '200':
+          description: user was successfully registered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token: 
+                    type: string
+              examples:
+                example1: 
+                  value: {"token":"jgJedLccIjDFGjI3MdU8.eyJzdWIiOiJ3d3d3d3cyIiwiZXhwIjoxNjIwNzQ0MTk5fQ.byBNihHlyWhzt94Vmifnk1PWNF48MwcrDYGc2yH9NYU"}
+                
+        '400':
+          description: some fields not correct. (Ну можно в теле указать какие поля некорректны)
+        '403':
+          description: login is already in use
+  /account/register:
+    {}
+  /account/login:
+    {}
+
+          
+    
+
+components:
+  securitySchemes:
+    jwtInHeader:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    RequestRegisterSimple:
+      type: object
+      required:
+        - login
+        - nickname
+      properties:
+        login: 
+          type: string
+        nickname:
+          type: string
